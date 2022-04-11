@@ -2,6 +2,7 @@ from requests_html import HTMLSession
 import requests
 import os
 import re
+import webbrowser
 
 def getUrlsFromGoogle(name):
     name = name.replace(" ","")
@@ -11,15 +12,12 @@ def getUrlsFromGoogle(name):
     response = session.get(url)
     urls = response.html.absolute_links
 
-    instagram_urls = []
-
     for url in urls:
         if "instagram.com" in url:
             username = url.split("/")[3]
-            if set(username).issubset(name):
-                instagram_urls.append(url)
-    
-    return instagram_urls
+            if len(username) > 3 and set(username).issubset(name):
+                return url
+        
 
 def getImageUrls(instagram_url):
     session = HTMLSession()
@@ -49,12 +47,15 @@ def downloadImages(username,img_urls):
     
 def main():
     name = str(input("What is your target full name?\n")).lower()
-    instagram_urls_from_google = getUrlsFromGoogle(name)
-    print(instagram_urls_from_google)
+    instagram_url = getUrlsFromGoogle(name)
 
-    for instagram_url in instagram_urls_from_google:
-        username = instagram_url.split("/")[3]
-        img_urls = getImageUrls(instagram_url)
-        downloadImages(username,img_urls)
+    webbrowser.open_new_tab(instagram_url)
+    username = instagram_url.split("/")[3]
+
+    img_urls = getImageUrls(instagram_url)
+
+    print(f"Downloading files from {username} instagram...")
+    downloadImages(username,img_urls)
+    print("Done!\n")
 
 main()
