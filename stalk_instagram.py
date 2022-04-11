@@ -14,9 +14,10 @@ def getUrlsFromGoogle(name):
 
     for url in urls:
         if "instagram.com" in url:
-            username = url.split("/")[3]
-            if len(username) > 3 and set(username).issubset(name):
-                return url
+            instagram_username = url.split("/")[3]
+            if len(instagram_username) > 3 and set(instagram_username).issubset(name):
+                instagram_url = url
+                return instagram_url, instagram_username
         
 
 def getImageUrls(instagram_url):
@@ -37,25 +38,24 @@ def getImageUrls(instagram_url):
 
     return img_urls
 
-def downloadImages(username,img_urls):
-    os.mkdir(f"./instagram_{username}")
+def downloadImages(instagram_username, img_urls):
+    os.mkdir(f"./instagram_{instagram_username}")
     for img_url in img_urls:
         filename = img_url.split("/")[5].split("?")[0]
         img = requests.get(img_url).content
-        with open(f"./instagram_{username}/{filename}","wb") as f:
+        with open(f"./instagram_{instagram_username}/{filename}","wb") as f:
             f.write(img)
     
 def main():
     name = str(input("What is your target full name?\n")).lower()
-    instagram_url = getUrlsFromGoogle(name)
+    instagram_url, instagram_username = getUrlsFromGoogle(name)
 
     webbrowser.open_new_tab(instagram_url)
-    username = instagram_url.split("/")[3]
 
     img_urls = getImageUrls(instagram_url)
 
-    print(f"Downloading files from {username} instagram...")
-    downloadImages(username,img_urls)
+    print(f"Downloading files from {instagram_username} instagram...")
+    downloadImages(instagram_username,img_urls)
     print("Done!\n")
 
 main()
