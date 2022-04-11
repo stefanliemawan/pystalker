@@ -1,5 +1,4 @@
 from requests_html import HTMLSession
-import re
 import webbrowser
 
 def getUrlsFromGoogle(name):
@@ -17,28 +16,13 @@ def getUrlsFromGoogle(name):
                 twitter_url = f"https://twitter.com/{twitter_username}"
                 return twitter_url, twitter_username
 
-def getTweets(twitter_url, twitter_username):
-    session = HTMLSession()
-    response = session.get(twitter_url)
+    return None, None
 
-    html = response.html.html
-    keyword = rf"https:\/\/twitter.com/{twitter_username}/status/.+?(?=\")"
-
-    tweet_urls = re.findall(keyword, html)
-
-    for tweet_url in tweet_urls:
-        response = session.get(tweet_url)
-        response.html.render()
-        print(response.html.search("tonight's"))
-        break
-
-def main():
-    name = str(input("What is your target full name?\n")).lower()
+def stalk(name):
     twitter_url, twitter_username = getUrlsFromGoogle(name)
 
-    webbrowser.open_new_tab(twitter_url)
+    if twitter_url:
+        webbrowser.open_new_tab(twitter_url)
 
     # tweets = getTweets(twitter_url, twitter_username)
 
-
-main()

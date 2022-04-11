@@ -18,6 +18,8 @@ def getUrlsFromGoogle(name):
             if len(instagram_username) > 3 and set(instagram_username).issubset(name):
                 instagram_url = f"https://www.instagram.com/{instagram_username}"
                 return instagram_url, instagram_username
+
+    return None, None
         
 
 def getImageUrls(instagram_url):
@@ -46,16 +48,16 @@ def downloadImages(instagram_username, img_urls):
         with open(f"./instagram_{instagram_username}/{filename}","wb") as f:
             f.write(img)
     
-def main():
-    name = str(input("What is your target full name?\n")).lower()
+def stalk(name):
     instagram_url, instagram_username = getUrlsFromGoogle(name)
+    
+    if instagram_url:
+        webbrowser.open_new_tab(instagram_url)
 
-    webbrowser.open_new_tab(instagram_url)
+        img_urls = getImageUrls(instagram_url)
 
-    img_urls = getImageUrls(instagram_url)
-
-    print(f"Downloading files from {instagram_username} instagram...")
-    downloadImages(instagram_username,img_urls)
-    print("Done!\n")
-
-main()
+        download = str(input(f"Instagram account {instagram_username} found, proceed to download pictures? (y/n)"))
+        if download == "y":
+            print(f"Downloading files from {instagram_username} instagram...")
+            downloadImages(instagram_username,img_urls)
+            print("Done!\n")
