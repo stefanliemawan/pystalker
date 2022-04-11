@@ -40,10 +40,21 @@ def getImageUrls(instagram_url):
     return img_urls
 
 def downloadImages(username,img_urls):
-    os.mkdir(username)
+    os.mkdir(f"./instagram_{username}")
     for img_url in img_urls:
         filename = img_url.split("/")[5].split("?")[0]
         img = requests.get(img_url).content
-        with open(f"{username}/{filename}","wb") as f:
+        with open(f"./instagram_{username}/{filename}","wb") as f:
             f.write(img)
     
+def main():
+    name = str(input("What is your target full name?\n")).lower()
+    instagram_urls_from_google = getUrlsFromGoogle(name)
+    print(instagram_urls_from_google)
+
+    for instagram_url in instagram_urls_from_google:
+        username = instagram_url.split("/")[3]
+        img_urls = getImageUrls(instagram_url)
+        downloadImages(username,img_urls)
+
+main()

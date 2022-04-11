@@ -10,3 +10,9 @@ def getUrlsFromGoogle(name):
     urls = list(filter(lambda x: "google.com" not in x, urls))
     
     return urls
+
+def main():
+    name = "madison beer"
+
+    urls_from_google = getUrlsFromGoogle(name)
+    print(urls_from_google)
