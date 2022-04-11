@@ -16,7 +16,7 @@ def getUrlsFromGoogle(name):
         if "instagram.com" in url:
             instagram_username = url.split("/")[3]
             if len(instagram_username) > 3 and set(instagram_username).issubset(name):
-                instagram_url = url
+                instagram_url = f"https://www.instagram.com/{instagram_username}"
                 return instagram_url, instagram_username
         
 

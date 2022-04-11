@@ -1,5 +1,6 @@
 from requests_html import HTMLSession
 import re
+import webbrowser
 
 def getUrlsFromGoogle(name):
     name = name.replace(" ","")
@@ -11,9 +12,9 @@ def getUrlsFromGoogle(name):
 
     for url in urls:
         if "twitter.com" in url:
-            twitter_username = url.split("/")[3].split("?")[-1]
+            twitter_username = url.split("/")[3].split("?")[0]
             if len(twitter_username) > 3 and set(twitter_username).issubset(name):
-                twitter_url = url
+                twitter_url = f"https://twitter.com/{twitter_username}"
                 return twitter_url, twitter_username
 
 def getTweets(twitter_url, twitter_username):
@@ -35,7 +36,9 @@ def main():
     name = str(input("What is your target full name?\n")).lower()
     twitter_url, twitter_username = getUrlsFromGoogle(name)
 
-    tweets = getTweets(twitter_url, twitter_username)
+    webbrowser.open_new_tab(twitter_url)
+
+    # tweets = getTweets(twitter_url, twitter_username)
 
 
 main()

@@ -16,3 +16,5 @@ def main():
 
     urls_from_google = getUrlsFromGoogle(name)
     print(urls_from_google)
+
+main()
